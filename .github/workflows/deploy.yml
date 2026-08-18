@@ -24,4 +24,4 @@ jobs:
           push: true
           tags: |
             dayeison87/mi-api:latest
-            dayeison87/mi-api:v1.0
+            dayeison87/mi-api:v1.0  
