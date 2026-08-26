@@ -51,8 +51,7 @@ jobs:
       - name: Construir e inspeccionar imagen localmente
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./backend/Dockerfile
+          context: ./backend
           push: false
           load: true
           tags: dayeison87/mi-api:latest
@@ -70,8 +69,7 @@ jobs:
       - name: Subir imagen a Docker Hub
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./backend/Dockerfile
+          context: ./backend
           push: true
           tags: dayeison87/mi-api:latest
 
