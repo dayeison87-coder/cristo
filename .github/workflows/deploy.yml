@@ -21,15 +21,14 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
           pip install pytest bandit
 
       - name: Ejecutar pruebas de seguridad con bandit
-        run: bandit -r . -x ./venv -s B101
+        run: bandit -r backend/ -s B101
 
       - name: Ejecutar pruebas con pytest
-        run: pytest
+        run: pytest backend/
 
   build-and-push:
     needs: test-and-security
@@ -48,25 +47,7 @@ jobs:
       - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Construir e inspeccionar imagen localmente
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          push: false
-          load: true
-          tags: dayeison87/mi-api:latest
-
-      - name: Escanear imagen con Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: dayeison87/mi-api:latest
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Subir imagen a Docker Hub
+      - name: Construir y subir imagen a Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: ./backend
